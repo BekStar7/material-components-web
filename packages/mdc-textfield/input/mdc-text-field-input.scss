@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+@import "../functions";
 @import "../variables";
 @import "@material/rtl/mixins";
 @import "@material/theme/variables";
@@ -89,27 +90,15 @@
   }
 }
 
-.mdc-text-field--with-leading-icon {
-  .mdc-text-field__input {
-    @include mdc-rtl-reflexive-property(padding, $mdc-text-field-icon-padding, $mdc-text-field-icon-position);
-  }
-}
-
-.mdc-text-field--with-trailing-icon {
-  .mdc-text-field__input {
-    @include mdc-rtl-reflexive-property(padding, $mdc-text-field-icon-position, $mdc-text-field-icon-padding);
-  }
-}
-
 // Graceful degredation for css-only inputs
 
-.mdc-text-field {
-  &:not(.mdc-text-field--upgraded):not(.mdc-text-field--textarea) .mdc-text-field__input {
+.mdc-text-field:not(.mdc-text-field--upgraded) {
+  &:not(.mdc-text-field--textarea) .mdc-text-field__input {
     transition: mdc-text-field-transition(border-bottom-color);
     border-bottom: 1px solid $mdc-text-field-divider-on-light;
   }
 
-  &:not(.mdc-text-field--upgraded) .mdc-text-field__input {
+  & .mdc-text-field__input {
     &:focus {
       @include mdc-theme-prop(border-color, primary);
     }
@@ -128,7 +117,7 @@
   }
 
   @include mdc-theme-dark {
-    &:not(.mdc-text-field--upgraded) .mdc-text-field__input {
+    & .mdc-text-field__input {
       &:not(:focus) {
         border-color: rgba(white, .12);
       }
