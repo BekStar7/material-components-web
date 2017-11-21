@@ -25,7 +25,6 @@ import {strings} from './constants';
  * @final
  */
 class MDCTextFieldInputFoundation extends MDCFoundation {
-
   /** @return enum {string} */
   static get strings() {
     return strings;
@@ -38,8 +37,8 @@ class MDCTextFieldInputFoundation extends MDCFoundation {
    */
   static get defaultAdapter() {
     return /** @type {!MDCTextFieldAdapter} */ ({
-      registerInteractionHandler: () => {},
-      deregisterInteractionHandler: () => {},
+      registerEventHandler: () => {},
+      deregisterEventHandler: () => {},
       getNativeInput: () => {},
       notifyFocusAction: () => {},
       notifyBlurAction: () => {},
@@ -62,24 +61,24 @@ class MDCTextFieldInputFoundation extends MDCFoundation {
     /** @private {function(): undefined} */
     this.inputInputHandler_ = () => this.autoCompleteFocus_();
     /** @private {function(): undefined} */
-    this.inputPressedHandler_ = () =>  this.notifyPressedAction_();
+    this.inputPressedHandler_ = () => this.notifyPressedAction_();
   }
 
   init() {
-    this.adapter_.registerInteractionHandler('focus', this.inputFocusHandler_);
-    this.adapter_.registerInteractionHandler('blur', this.inputBlurHandler_);
-    this.adapter_.registerInteractionHandler('input', this.inputInputHandler_);
+    this.adapter_.registerEventHandler('focus', this.inputFocusHandler_);
+    this.adapter_.registerEventHandler('blur', this.inputBlurHandler_);
+    this.adapter_.registerEventHandler('input', this.inputInputHandler_);
     ['mousedown', 'touchstart'].forEach((evtType) => {
-      this.adapter_.registerInteractionHandler(evtType, this.inputPressedHandler_);
+      this.adapter_.registerEventHandler(evtType, this.inputPressedHandler_);
     });
   }
 
   destroy() {
-    this.adapter_.deregisterInteractionHandler('focus', this.inputFocusHandler_);
-    this.adapter_.deregisterInteractionHandler('blur', this.inputBlurHandler_);
-    this.adapter_.deregisterInteractionHandler('input', this.inputInputHandler_);
+    this.adapter_.deregisterEventHandler('focus', this.inputFocusHandler_);
+    this.adapter_.deregisterEventHandler('blur', this.inputBlurHandler_);
+    this.adapter_.deregisterEventHandler('input', this.inputInputHandler_);
     ['mousedown', 'touchstart'].forEach((evtType) => {
-      this.adapter_.deregisterInteractionHandler(evtType, this.inputPressedHandler_);
+      this.adapter_.deregisterEventHandler(evtType, this.inputPressedHandler_);
     });
   }
 
@@ -131,16 +130,16 @@ class MDCTextFieldInputFoundation extends MDCFoundation {
   /**
    * @return {string} Returns the value in the input.
    */
-   getValue() {
+  getValue() {
     return this.getNativeInput_().value;
-   }
+  }
 
   /**
-   * @return {boolean}
+   * @return {boolean} Returns the result of the checkValidity() call in the native input.
    */
-   checkValidity() {
+  checkValidity() {
     return this.getNativeInput_().checkValidity();
-   }
+  }
 
   /**
    * @return {boolean} True if the input is disabled.
@@ -155,7 +154,7 @@ class MDCTextFieldInputFoundation extends MDCFoundation {
   setDisabled(disabled) {
     this.getNativeInput_().disabled = disabled;
   }
-  
+
   /**
    * @param {boolean} receivedUserInput Sets whether user input was received.
    */

@@ -53,12 +53,12 @@ class MDCTextFieldInput extends MDCComponent {
    */
   getDefaultFoundation() {
     return new MDCTextFieldInputFoundation(/** @type {!MDCTextFieldInputAdapter} */ (Object.assign({
-      registerInteractionHandler: (evtType, handler) => this.root_.addEventListener(evtType, handler),
-      deregisterInteractionHandler: (evtType, handler) => this.root_.removeEventListener(evtType, handler),
+      registerEventHandler: (evtType, handler) => this.root_.addEventListener(evtType, handler),
+      deregisterEventHandler: (evtType, handler) => this.root_.removeEventListener(evtType, handler),
       getNativeInput: () => this.root_,
       notifyFocusAction: () => this.emit(MDCTextFieldInputFoundation.strings.FOCUS_EVENT, {}),
       notifyBlurAction: () => this.emit(MDCTextFieldInputFoundation.strings.BLUR_EVENT, {}),
-      notifyPressedAction: () => this.emit(MDCTextFieldInputFoundation.strings.PRESSED_EVENT, {})
+      notifyPressedAction: () => this.emit(MDCTextFieldInputFoundation.strings.PRESSED_EVENT, {}),
     })));
   }
 }

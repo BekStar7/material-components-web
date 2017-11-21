@@ -29,7 +29,7 @@ let NativeInputType;
  * Adapter for MDC Text Field Input.
  *
  * Defines the shape of the adapter expected by the foundation. Implement this
- * adapter to integrate the TextField into your framework. See
+ * adapter to integrate the TextField input into your framework. See
  * https://github.com/material-components/material-components-web/blob/master/docs/authoring-components.md
  * for more information.
  *
@@ -41,14 +41,14 @@ class MDCTextFieldInputAdapter {
    * @param {string} evtType
    * @param {function(!Event): undefined} handler
    */
-  registerInteractionHandler(evtType, handler) {}
+  registerEventHandler(evtType, handler) {}
 
   /**
    * Deregisters an event listener on the native input element for a given event.
    * @param {string} evtType
    * @param {function(!Event): undefined} handler
    */
-  deregisterInteractionHandler(evtType, handler) {}
+  deregisterEventHandler(evtType, handler) {}
 
   /**
    * Returns an object representing the native text input element, with a

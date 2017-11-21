@@ -2,14 +2,14 @@
 title: "Text Field Input"
 layout: detail
 section: components
-excerpt: "The input is the element where the user enters text"
+excerpt: "The input element is where the user enters text"
 iconId: input
 path: /catalog/input-controls/text-fields/input/
 -->
 
 # Text Field Input
 
-The input is the element where the user enters text.
+The input element is where the user enters text.
 
 ## Design & API Documentation
 
