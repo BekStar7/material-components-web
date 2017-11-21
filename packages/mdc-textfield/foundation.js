@@ -76,8 +76,6 @@ class MDCTextFieldFoundation extends MDCFoundation {
     /** @private {boolean} */
     this.isFocused_ = false;
     /** @private {boolean} */
-    this.receivedUserInput_ = false;
-    /** @private {boolean} */
     this.useCustomValidityChecking_ = false;
     /** @private {function(): undefined} */
     this.inputFocusHandler_ = () => this.activateFocus();
@@ -210,7 +208,7 @@ class MDCTextFieldFoundation extends MDCFoundation {
     this.adapter_.removeClass(FOCUSED);
     this.adapter_.removeClassFromLabel(LABEL_SHAKE);
 
-    if (!input.getValue() && !input.isInvalid()) {
+    if (!input.getValue() && !input.isBadInput()) {
       this.adapter_.removeClassFromLabel(LABEL_FLOAT_ABOVE);
     }
 

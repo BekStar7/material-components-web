@@ -41,6 +41,9 @@ class MDCTextFieldInputFoundation extends MDCFoundation {
       registerInteractionHandler: () => {},
       deregisterInteractionHandler: () => {},
       getNativeInput: () => {},
+      notifyFocusAction: () => {},
+      notifyBlurAction: () => {},
+      notifyPressedAction: () => {},
     });
   }
 
@@ -106,7 +109,7 @@ class MDCTextFieldInputFoundation extends MDCFoundation {
   deactivateFocus_() {
     const input = this.getNativeInput_();
 
-    if (!input.value && !this.isInvalid()) {
+    if (!input.value && !this.isBadInput()) {
       this.receivedUserInput_ = false;
     }
 
@@ -120,13 +123,13 @@ class MDCTextFieldInputFoundation extends MDCFoundation {
   /**
    * @return {boolean} True if the input fails validity checks.
    */
-  isInvalid() {
+  isBadInput() {
     const input = this.getNativeInput_();
     return input.validity ? input.validity.badInput : input.badInput;
   }
 
   /**
-   * @return {string} Returns the value.
+   * @return {string} Returns the value in the input.
    */
    getValue() {
     return this.getNativeInput_().value;
