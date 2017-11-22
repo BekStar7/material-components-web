@@ -66,6 +66,13 @@ class FakeBottomLine {
   }
 }
 
+class FakeInput {
+  constructor() {
+    this.listen = td.func('input.listen');
+    this.unlisten = td.func('input.unlisten');
+  }
+}
+
 test('#constructor when given a `mdc-text-field--box` element instantiates a ripple on the root element', () => {
   const root = getFixture();
   root.classList.add(cssClasses.BOX);
@@ -103,8 +110,15 @@ function setupTest() {
   const root = getFixture();
   const icon = root.querySelector('.mdc-text-field__icon');
   const bottomLine = new FakeBottomLine();
-  const component = new MDCTextField(root, undefined, (el) => new FakeRipple(el), () => bottomLine);
-  return {root, bottomLine, icon, component};
+  const input = new FakeInput();
+  const inputFoundation = td.object({
+    getValue: () => '',
+    setDisabled: () => {},
+  });
+  const component = new MDCTextField(
+    root, undefined, (el) => new FakeRipple(el), () => bottomLine, () => input);
+  td.when(component.adapter_.getInputFoundation()).thenReturn(inputFoundation);
+  return {root, bottomLine, input, icon, component};
 }
 
 test('#initialSyncWithDom sets disabled if input element is not disabled', () => {
@@ -145,6 +159,20 @@ test('#adapter.setIconAttr sets a given attribute to a given value to the icon e
   assert.equal(icon.getAttribute('tabindex'), '-1');
 });
 
+test('#adapter.registerInputEventHandler adds event listener to input', () => {
+  const {component, input} = setupTest();
+  const handler = () => {};
+  component.getDefaultFoundation().adapter_.registerInputEventHandler('evt', handler);
+  td.verify(input.listen('evt', handler));
+});
+
+test('#adapter.deregisterInputEventHandler removes event listener from input', () => {
+  const {component, input} = setupTest();
+  const handler = () => {};
+  component.getDefaultFoundation().adapter_.deregisterInputEventHandler('evt', handler);
+  td.verify(input.unlisten('evt', handler));
+});
+
 test('#adapter.registerBottomLineEventHandler adds event listener to bottom line', () => {
   const {component, bottomLine} = setupTest();
   const handler = () => {};
@@ -152,7 +180,7 @@ test('#adapter.registerBottomLineEventHandler adds event listener to bottom line
   td.verify(bottomLine.listen('evt', handler));
 });
 
-test('#adapter.deregisterBottomLineEventHandler removes event listener for "transitionend" from bottom line', () => {
+test('#adapter.deregisterBottomLineEventHandler removes event listener from bottom line', () => {
   const {component, bottomLine} = setupTest();
   const handler = () => {};
   component.getDefaultFoundation().adapter_.deregisterBottomLineEventHandler('evt', handler);
@@ -198,26 +226,6 @@ test('#adapter.removeClassFromLabel does nothing if no label element present', (
   assert.doesNotThrow(() => component.getDefaultFoundation().adapter_.removeClassFromLabel('foo'));
 });
 
-test('#adapter.registerInputInteractionHandler adds a handler to the input element for a given event', () => {
-  const {root, component} = setupTest();
-  const input = root.querySelector('.mdc-text-field__input');
-  const handler = td.func('eventHandler');
-  component.getDefaultFoundation().adapter_.registerInputInteractionHandler('click', handler);
-  domEvents.emit(input, 'click');
-  td.verify(handler(td.matchers.anything()));
-});
-
-test('#adapter.deregisterInputInteractionHandler removes a handler from the input element for a given event', () => {
-  const {root, component} = setupTest();
-  const input = root.querySelector('.mdc-text-field__input');
-  const handler = td.func('eventHandler');
-
-  input.addEventListener('click', handler);
-  component.getDefaultFoundation().adapter_.deregisterInputInteractionHandler('click', handler);
-  domEvents.emit(input, 'click');
-  td.verify(handler(td.matchers.anything()), {times: 0});
-});
-
 test('#adapter.registerTextFieldInteractionHandler adds an event handler for a given event on the root', () => {
   const {root, component} = setupTest();
   const handler = td.func('TextFieldInteractionHandler');
@@ -233,14 +241,6 @@ test('#adapter.deregisterTextFieldInteractionHandler removes an event handler fo
   component.getDefaultFoundation().adapter_.registerTextFieldInteractionHandler('click', handler);
   domEvents.emit(root, 'click');
   td.verify(handler(td.matchers.anything()));
-});
-
-test('#adapter.getNativeInput returns the component input element', () => {
-  const {root, component} = setupTest();
-  assert.equal(
-    component.getDefaultFoundation().adapter_.getNativeInput(),
-    root.querySelector('.mdc-text-field__input')
-  );
 });
 
 test('#adapter.addClassToHelperText does nothing if no helper text element present', () => {

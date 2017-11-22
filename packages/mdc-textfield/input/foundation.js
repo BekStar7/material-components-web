@@ -36,7 +36,7 @@ class MDCTextFieldInputFoundation extends MDCFoundation {
    * @return {!MDCTextFieldInputAdapter}
    */
   static get defaultAdapter() {
-    return /** @type {!MDCTextFieldAdapter} */ ({
+    return /** @type {!MDCTextFieldInputAdapter} */ ({
       registerEventHandler: () => {},
       deregisterEventHandler: () => {},
       getNativeInput: () => {},

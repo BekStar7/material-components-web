@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+/* eslint no-unused-vars: [2, {"args": "none"}] */
+
 /**
  * @typedef {{
  *   value: string,

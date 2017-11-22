@@ -29,7 +29,7 @@ test('exports strings', () => {
 
 test('defaultAdapter returns a complete adapter implementation', () => {
   verifyDefaultAdapter(MDCTextFieldInputFoundation, [
-    'registerInteractionHandler', 'deregisterInteractionHandler', 'getNativeInput',
+    'registerEventHandler', 'deregisterEventHandler', 'getNativeInput',
     'notifyFocusAction', 'notifyBlurAction', 'notifyPressedAction',
   ]);
 });
@@ -40,22 +40,27 @@ test('#init adds event listeners', () => {
   const {foundation, mockAdapter} = setupTest();
   foundation.init();
 
-  td.verify(mockAdapter.registerInteractionHandler('focus', td.matchers.isA(Function)));
-  td.verify(mockAdapter.registerInteractionHandler('blur', td.matchers.isA(Function)));
-  td.verify(mockAdapter.registerInteractionHandler('input', td.matchers.isA(Function)));
-  td.verify(mockAdapter.registerInteractionHandler('mousedown', td.matchers.isA(Function)));
-  td.verify(mockAdapter.registerInteractionHandler('touchstart', td.matchers.isA(Function)));
+  td.verify(mockAdapter.registerEventHandler('focus', td.matchers.isA(Function)));
+  td.verify(mockAdapter.registerEventHandler('blur', td.matchers.isA(Function)));
+  td.verify(mockAdapter.registerEventHandler('input', td.matchers.isA(Function)));
+  td.verify(mockAdapter.registerEventHandler('mousedown', td.matchers.isA(Function)));
+  td.verify(mockAdapter.registerEventHandler('touchstart', td.matchers.isA(Function)));
 });
 
 test('#destroy removes event listeners', () => {
   const {foundation, mockAdapter} = setupTest();
   foundation.destroy();
 
-  td.verify(mockAdapter.deregisterInteractionHandler('focus', td.matchers.isA(Function)));
-  td.verify(mockAdapter.deregisterInteractionHandler('blur', td.matchers.isA(Function)));
-  td.verify(mockAdapter.deregisterInteractionHandler('input', td.matchers.isA(Function)));
-  td.verify(mockAdapter.deregisterInteractionHandler('mousedown', td.matchers.isA(Function)));
-  td.verify(mockAdapter.deregisterInteractionHandler('touchstart', td.matchers.isA(Function)));
+  td.verify(mockAdapter.deregisterEventHandler('focus', td.matchers.isA(Function)));
+  td.verify(mockAdapter.deregisterEventHandler('blur', td.matchers.isA(Function)));
+  td.verify(mockAdapter.deregisterEventHandler('input', td.matchers.isA(Function)));
+  td.verify(mockAdapter.deregisterEventHandler('mousedown', td.matchers.isA(Function)));
+  td.verify(mockAdapter.deregisterEventHandler('touchstart', td.matchers.isA(Function)));
+});
+
+test('#constructor sets disabled to false', () => {
+  const {foundation} = setupTest();
+  assert.isNotOk(foundation.isDisabled());
 });
 
 test('#setDisabled set the disabled property on the native input when there is one', () => {
@@ -76,7 +81,7 @@ test('on input, notifies focus action if this.receivedUserInput_ is false', () =
   const {foundation, mockAdapter} = setupTest();
   let input;
 
-  td.when(mockAdapter.registerInteractionHandler('input', td.matchers.isA(Function)))
+  td.when(mockAdapter.registerEventHandler('input', td.matchers.isA(Function)))
     .thenDo((evtType, handler) => {
       input = handler;
     });
@@ -89,7 +94,7 @@ test('on input, does nothing if this.receivedUserInput_ is true', () => {
   const {foundation, mockAdapter} = setupTest();
   let input;
 
-  td.when(mockAdapter.registerInteractionHandler('input', td.matchers.isA(Function)))
+  td.when(mockAdapter.registerEventHandler('input', td.matchers.isA(Function)))
     .thenDo((evtType, handler) => {
       input = handler;
     });
@@ -103,7 +108,7 @@ test('on focus, notifies focus action', () => {
   const {foundation, mockAdapter} = setupTest();
   let focus;
 
-  td.when(mockAdapter.registerInteractionHandler('focus', td.matchers.isA(Function)))
+  td.when(mockAdapter.registerEventHandler('focus', td.matchers.isA(Function)))
     .thenDo((evtType, handler) => {
       focus = handler;
     });
@@ -116,7 +121,7 @@ test('on blur, notifies blur action', () => {
   const {foundation, mockAdapter} = setupTest();
   let blur;
 
-  td.when(mockAdapter.registerInteractionHandler('blur', td.matchers.isA(Function)))
+  td.when(mockAdapter.registerEventHandler('blur', td.matchers.isA(Function)))
     .thenDo((evtType, handler) => {
       blur = handler;
     });
@@ -129,7 +134,7 @@ test('on mousedown, notifies pressed action', () => {
   const {foundation, mockAdapter} = setupTest();
   let pressed;
 
-  td.when(mockAdapter.registerInteractionHandler('mousedown', td.matchers.isA(Function)))
+  td.when(mockAdapter.registerEventHandler('mousedown', td.matchers.isA(Function)))
     .thenDo((evtType, handler) => {
       pressed = handler;
     });
@@ -142,7 +147,7 @@ test('on touchstart, notifies pressed action', () => {
   const {foundation, mockAdapter} = setupTest();
   let pressed;
 
-  td.when(mockAdapter.registerInteractionHandler('touchstart', td.matchers.isA(Function)))
+  td.when(mockAdapter.registerEventHandler('touchstart', td.matchers.isA(Function)))
     .thenDo((evtType, handler) => {
       pressed = handler;
     });

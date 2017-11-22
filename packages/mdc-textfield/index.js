@@ -34,14 +34,14 @@ class MDCTextField extends MDCComponent {
    */
   constructor(...args) {
     super(...args);
-    /** @private {?MDCTextFieldInput} */
-    this.input_;
     /** @private {?Element} */
     this.label_;
     /** @type {?Element} */
     this.helperTextElement;
     /** @type {?MDCRipple} */
     this.ripple;
+    /** @private {?MDCTextFieldInput} */
+    this.input_;
     /** @private {?MDCTextFieldBottomLine} */
     this.bottomLine_;
     /** @private {?Element} */
@@ -61,12 +61,15 @@ class MDCTextField extends MDCComponent {
    * creates a new MDCRipple.
    * @param {(function(!Element): !MDCTextFieldBottomLine)=} bottomLineFactory A function which
    * creates a new MDCTextFieldBottomLine.
+   * @param {(function(!Element): !MDCTextFieldInput)=} inputFactory A function which
+   * creates a new MDCTextFieldInput.
    */
   initialize(
     rippleFactory = (el) => new MDCRipple(el),
-    bottomLineFactory = (el) => new MDCTextFieldBottomLine(el)) {
+    bottomLineFactory = (el) => new MDCTextFieldBottomLine(el),
+    inputFactory = (el) => new MDCTextFieldInput(el)) {
     const inputElement = this.root_.querySelector(strings.INPUT_SELECTOR);
-    this.input_ = new MDCTextFieldInput(inputElement);
+    this.input_ = inputFactory(inputElement);
     this.label_ = this.root_.querySelector(strings.LABEL_SELECTOR);
     this.helperTextElement = null;
     this.ripple = null;

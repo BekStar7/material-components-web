@@ -34,14 +34,6 @@ class MDCTextFieldInput extends MDCComponent {
   }
 
   /**
-   * Initiliazes the input's internal state based on the environment's
-   * state.
-   */
-  initialSyncWithDom() {
-    this.disabled = this.root_.disabled;
-  }
-
-  /**
    * @return {MDCTextFieldInputFoundation}.
    */
   get foundation() {

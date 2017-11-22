@@ -43,16 +43,12 @@ test('defaultAdapter returns a complete adapter implementation', () => {
     'addClassToHelperText', 'removeClassFromHelperText', 'helperTextHasClass',
     'registerInputEventHandler', 'deregisterInputEventHandler',
     'registerBottomLineEventHandler', 'deregisterBottomLineEventHandler',
-    'setHelperTextAttr', 'removeHelperTextAttr', 'getNativeInput', 'getBottomLineFoundation',
+    'setHelperTextAttr', 'removeHelperTextAttr', 'getBottomLineFoundation',
+    'getInputFoundation',
   ]);
 });
 
 const setupTest = () => setupFoundationTest(MDCTextFieldFoundation);
-
-test('#constructor sets disabled to false', () => {
-  const {foundation} = setupTest();
-  assert.isNotOk(foundation.isDisabled());
-});
 
 test('#setDisabled adds mdc-text-field--disabled when set to true', () => {
   const {foundation, mockAdapter} = setupTest();

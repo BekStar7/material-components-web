@@ -267,6 +267,13 @@ class MDCTextFieldFoundation extends MDCFoundation {
   }
 
   /**
+   * @return {boolean} True if the text field is disabled.
+   */
+  isDisabled() {
+    return this.adapter_.getInputFoundation().isDisabled();
+  }
+
+  /**
    * @param {boolean} disabled Sets the text field disabled or enabled.
    */
   setDisabled(disabled) {
